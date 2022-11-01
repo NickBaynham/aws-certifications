@@ -78,4 +78,26 @@ aws ec2 describe-security-groups --group-ids $sg_id
 aws ec2 delete-security-group --group-id $sg_id
 ```
 
+### Finding an Image
+
+- Reference: https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html
+
+```
+aws ec2 describe-images \
+  --region us-east-1
+```
+
+### Launching an Instance
+
+- Reference: https://docs.aws.amazon.com/cli/latest/userguide/cli-services-ec2-instances.html
+
+```
+aws ec2 run-instances \
+  --image-id ami-xxxxxxxx \
+  --count 1 \
+  --instance-type t2.micro \
+  --key-name MyKeyPair \
+  --security-group-ids sg-903004f8 \
+  --subnet-id subnet-6e7f829e
+```
 
