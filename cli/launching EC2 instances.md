@@ -101,3 +101,9 @@ aws ec2 run-instances \
   --subnet-id subnet-6e7f829e
 ```
 
+### Terminate running instances
+
+```
+aws ec2 terminate-instances --instance-ids $ec2_id
+```
+
