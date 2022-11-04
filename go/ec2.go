@@ -1,11 +1,38 @@
+package main
+
 import (
-    "github.com/aws/aws-sdk-go/aws"
-    "github.com/aws/aws-sdk-go/aws/session"
-    "github.com/aws/aws-sdk-go/service/s3"
+	"context"
+	"fmt"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	_ "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	_ "github.com/aws/aws-sdk-go-v2/service/s3"
+	"log"
 )
 
-// ...
+func main() {
+	fmt.Println("Hello AWS!")
 
-sess := session.Must(session.NewSessionWithOptions(session.Options{
-    SharedConfigState: session.SharedConfigEnable,
-}))
+	// Load the Shared AWS Configuration (~/.aws/config)
+	cfg, err := config.LoadDefaultConfig(context.TODO())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Create an Amazon S3 service client
+	client := s3.NewFromConfig(cfg)
+
+	// Get the first page of results for ListObjectsV2 for a bucket
+	output, err := client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
+		Bucket: aws.String("my-bucket"),
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("first page results:")
+	for _, object := range output.Contents {
+		log.Printf("key=%s size=%d", aws.ToString(object.Key), object.Size)
+	}
+}

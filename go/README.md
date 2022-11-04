@@ -9,6 +9,8 @@
 - https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/setting-up.html
 
 ```
-go install github.com/aws/aws-sdk-go@latest
+go mod init awscerts    
+go get github.com/aws/aws-sdk-go-v2 
+go get github.com/aws/aws-sdk-go-v2/service/s3
 ```
 
