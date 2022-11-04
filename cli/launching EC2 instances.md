@@ -14,6 +14,9 @@ aws ec2 help
 - You must provide the key pair to AWS when creating an instance, and then you will use this key pair to authenticate when you connect to the instance.
 - You must have the policy IAMUserSSHKeys
 ```
+export name=automation
+aws ec2 create-key-pair --key-name $automation --query 'KeyMaterial' --output text > ${automation}.pem
+chmod 400 ${automation}.pem
 export name=instances
 aws ec2 create-key-pair --key-name $name --query 'KeyMaterial' --output text > ${name}.pem
 chmod 400 ${name}.pem
@@ -117,6 +120,7 @@ systemctl enable httpd
 ### Terminate running instances
 
 ```
+aws ec2 terminate-instances --instance-ids $EC2
 export EC2=<id of EC2 instance above>
 aws ec2 terminate-instances --instance-ids $EC2
 ```
