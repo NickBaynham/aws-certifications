@@ -14,8 +14,9 @@ aws ec2 help
 - You must provide the key pair to AWS when creating an instance, and then you will use this key pair to authenticate when you connect to the instance.
 
 ```
-aws ec2 create-key-pair --key-name MyKeyPair --query 'KeyMaterial' --output text > MyKeyPair.pem
-chmod 400 MyKeyPair.pem
+export name=automation
+aws ec2 create-key-pair --key-name $automation --query 'KeyMaterial' --output text > ${automation}.pem
+chmod 400 ${automation}.pem
 ```
 
 To display the fingerprint:
@@ -104,6 +105,6 @@ aws ec2 run-instances \
 ### Terminate running instances
 
 ```
-aws ec2 terminate-instances --instance-ids $ec2_id
+aws ec2 terminate-instances --instance-ids $EC2
 ```
 
