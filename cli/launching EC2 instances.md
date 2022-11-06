@@ -40,6 +40,8 @@ aws ec2 describe-vpcs
 export VPC=<vpc id from above>
 ```
 
+### Security Group
+
 - Then you can create a shell variable with the vpc id and create a security group:
 
 ```
