@@ -21,3 +21,7 @@ variable "web_vpc_internet_gateway_name" {
 variable "cidr_block_all" {
   default = "0.0.0.0/0"
 }
+
+variable "web_security_group_name" {
+  default = "web-security-group"
+}
