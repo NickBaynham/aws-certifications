@@ -49,3 +49,75 @@ resource "aws_security_group" "default" {
     Name = var.web_security_group_name
   }
 }
+
+resource "aws_subnet" "rds_subnet" {
+  count                   = length(data.aws_availability_zones.azs.names)
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = "10.0.${length(data.aws_availability_zones.azs.names) + count.index}.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = element(data.aws_availability_zones.azs.names, count.index)
+  tags = {
+    Name = "rds-${element(data.aws_availability_zones.azs.names, count.index)}"
+  }
+}
+
+resource "aws_db_subnet_group" "rds_subnet_group" {
+  name        = "${var.rds_instance_identifier}-subnet-group"
+  description = "Terraform example RDS subnet group"
+  subnet_ids  = [aws_subnet.rds_subnet.*.id]
+}
+
+resource "aws_security_group" "rds_security_group" {
+  name        = "rds_security_group"
+  description = "RDS MySQL server Security Group"
+  vpc_id      = aws_vpc.vpc.id
+  # Keep the instance private by only allowing traffic from the web server.
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.default.id]
+  }
+  # Allow all outbound traffic.
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "rds-security-group"
+  }
+}
+
+resource "aws_security_group" "alb_security_group" {
+  name        = "alb_security_group"
+  description = "Application load balancer security group"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = var.allowed_cidr_blocks
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = var.allowed_cidr_blocks
+  }
+
+  # Allow all outbound traffic.
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "alb-security-group"
+  }
+}
