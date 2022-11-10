@@ -9,7 +9,7 @@ venv/
 *.tfstate.*
 
 # tfvars
-*.tfvars
+
 
 # Crash log files
 crash.log
