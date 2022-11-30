@@ -1,0 +1,21 @@
+---
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: Update EC2 Amazon Linux 2 Server
+      ansible.builtin.shell: sudo yum -y update
+    - name: Installs Nginx web server
+      ansible.builtin.shell: sudo amazon-linux-extras install nginx1
+    - name: Start nginx
+      ansible.builtin.shell: sudo systemctl start nginx
+    - name: Upload default index.html for host
+      copy: src={{(lookup('env','DEV_HOME'))}}/aws-certifications/www/html/index.html dest=/usr/share/nginx/html/ mode=0644
+
+    - name: Upload first CSS file
+      copy: src={{(lookup('env','DEV_HOME'))}}/aws-certifications/www/css/style.css dest=/usr/share/nginx/html/ mode=0644
+
+    - name: Create a directory called images
+      file: path=/usr/share/nginx/html/images state=directory mode=0755
+
+    - name: Upload first image
+      copy: src={{(lookup('env','DEV_HOME'))}}/aws-certifications/www/images/pic.png dest=/usr/share/nginx/html/images/ mode=0644
