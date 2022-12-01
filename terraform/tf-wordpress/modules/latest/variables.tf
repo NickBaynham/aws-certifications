@@ -6,7 +6,7 @@ variable "region" {}
 variable "shared_credentials_file" {}
 variable "IsUbuntu" {
   type    = bool
-  default = true
+  default = false
 
 }
 variable "AZ1" {}
@@ -18,7 +18,12 @@ variable "subnet2_cidr" {}
 variable "subnet3_cidr" {}
 variable "instance_type" {}
 variable "instance_class" {}
-variable "PUBLIC_KEY_PATH" {}
-variable "PRIVATE_KEY_PATH" {}
 variable "root_volume_size" {}
 
+variable "key_pair_path" {
+  default = "~/.ssh/ec2.pem"
+}
+
+variable "key_name" {
+  default = "ec2"
+}

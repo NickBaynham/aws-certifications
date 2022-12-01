@@ -3,7 +3,7 @@ resource "aws_instance" "web_server" {
   instance_type = "t3.micro"
   key_name      = var.key_name
   network_interface {
-    network_interface_id = aws_network_interface.foo.id
+    network_interface_id = aws_network_interface.interface.id
     device_index         = 0
   }
   tags = {
@@ -11,7 +11,7 @@ resource "aws_instance" "web_server" {
   }
 }
 
-resource "aws_network_interface" "foo" {
+resource "aws_network_interface" "interface" {
   subnet_id = data.aws_subnet.subnet_1.id
 
   tags = {
