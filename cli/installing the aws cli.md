@@ -32,3 +32,10 @@ Default region name [None]: us-east-1
 Default output format [None]: json
 ```
 Enter the Access Key Id, Secret Key Id, and the default region name.
+
+## Install eksctl
+For working with Elastic Kubernetes Service install as follows:
+
+```yaml
+brew install eksctl
+```
